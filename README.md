@@ -9,9 +9,9 @@ Make sure you're using Python 3, then simply clone this repository and start usi
 git clone https://github.com/hsuanhauliu/news-title-generator.git
 ```
 
-### Execution
+### Demo execution
 ```
-python3 news-title-generator.py
+python3 NTG_demo.py
 ```
 
 ### Make your own data
