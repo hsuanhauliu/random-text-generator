@@ -89,20 +89,9 @@ class RandomTextGenerator(object):
 
         return new_title
 
-    def generate_multiple(self):
+    def generate_multiple(self, text_number):
         if self.file_flag:
             print("Can't generate title due to file reading failure.")
             return
-
-        flag = True
-
-        while flag:
-            print(self.generate_title())
-            print()
-
-            user_input = input(">>> Generate more? [type y for yes]: ")
-            if user_input == "y":
-                flag = True
-            else:
-                flag = False
-        return
+        
+        return [self.generate_title() for i in range(text_number)]
