@@ -1,16 +1,18 @@
 import os
 import random
 
-class CNN_Title_Generator(object):
-    LIMIT = 20 # limit of word counts
+class NewsTitleGenerator(object):
 
-    def __init__(self):
+    def __init__(self, limit=20):
+        self.limit = limit # limit of word counts
         self.brain = {"**": {"**": 0}}
+        self.file_flag = True
 
     def train(self, filename):
         titles = []
         if self.read_file(filename, titles):
-            return True
+            self.file_flag = True
+            return
 
         for title in titles:
             words = title.split() # a list of words in the title
@@ -36,7 +38,9 @@ class CNN_Title_Generator(object):
                         self.brain[prev_w][curr_w] = 1
                     else:
                         self.brain[prev_w][curr_w] += 1
-        return False
+
+        self.file_flag = False
+        return
 
     def read_file(self, filename, titles_list):
         if os.path.isfile(filename):
@@ -50,6 +54,10 @@ class CNN_Title_Generator(object):
         return True
 
     def generate_title(self):
+        if self.file_flag:
+            print("Can't generate title due to file reading failure.")
+            return
+
         new_title = ""
         curr_w = ""
         word_count = 1
@@ -66,7 +74,7 @@ class CNN_Title_Generator(object):
                     new_title += w
                     break
 
-        while curr_w in self.brain.keys() and word_count < self.LIMIT:
+        while curr_w in self.brain.keys() and word_count < self.limit:
             counter = 0
             word_count += 1
             prob = random.randint(1, self.brain[curr_w]["**"])
@@ -82,6 +90,10 @@ class CNN_Title_Generator(object):
         return new_title
 
     def generate_multiple(self):
+        if self.file_flag:
+            print("Can't generate title due to file reading failure.")
+            return
+
         flag = True
 
         while flag:
@@ -94,9 +106,3 @@ class CNN_Title_Generator(object):
             else:
                 flag = False
         return
-
-
-ctg = CNN_Title_Generator()
-filename = input("Enter filename: ")
-if not ctg.train(filename):
-    ctg.generate_multiple()
